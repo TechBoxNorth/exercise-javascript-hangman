@@ -117,6 +117,7 @@ function newGame(){
 
     }
     console.log(answer);
+    letterBoxes.children[1].firstChild.innerText = 'Q';
 }
 
 document.addEventListener('keypress', (e) => {
@@ -151,22 +152,27 @@ document.addEventListener('keypress', (e) => {
 
 function checkLetter(guess){
     if(answer.indexOf(guess) > -1){
-        console.log(`The letter "${guess}" exists in the solution.`);
+        addCorrectLetter(guess);
     } else {
-        console.log(`The letter "${guess}" is not part of the solution.`);
-        let newDiv = document.createElement('div');
-        newDiv.classList.add('letter');
-        newDiv.innerHTML = guess;
-        wrongLetters.appendChild(newDiv);
+        addWrongLetter(guess);
     }
 }
 
-function addCorrectLetter(){
-
+function addCorrectLetter(guess){
+    console.log(`The letter "${guess}" exists in the solution.`);
+    for(let i = 0; i < answer.length; i++){
+        if(guess === answer[i]){
+            letterBoxes.children[i].firstChild.innerText = guess;
+        }
+    }
 }
 
-function addWrongLetter(){
-
+function addWrongLetter(guess){
+    console.log(`The letter "${guess}" is not part of the solution.`);
+    let newDiv = document.createElement('div');
+    newDiv.classList.add('letter');
+    newDiv.innerHTML = guess;
+    wrongLetters.appendChild(newDiv);
 }
 
 function winLose(){
