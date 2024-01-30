@@ -103,7 +103,7 @@ let answers = [
     "watermelon",
     "zucchini"];
 let answer = '';
-let guesses = 0;
+let guesses = '';
 let guess = "";
 
 function newGame(){
@@ -117,7 +117,6 @@ function newGame(){
 
     }
     console.log(answer);
-    letterBoxes.children[1].firstChild.innerText = 'Q';
 }
 
 document.addEventListener('keypress', (e) => {
@@ -151,9 +150,16 @@ document.addEventListener('keypress', (e) => {
 });
 
 function checkLetter(guess){
+    if(guesses.includes(guess)){
+        alert(`Du har redan gissat på bokstaven "${guess}"`);
+        return;
+    } else {
+        guesses += guess;
+    }
+    console.log(guesses);
     if(answer.indexOf(guess) > -1){
         addCorrectLetter(guess);
-    } else {
+    } else if(!answer.includes(guess)){
         addWrongLetter(guess);
     }
 }
