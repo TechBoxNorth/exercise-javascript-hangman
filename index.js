@@ -1,31 +1,3 @@
-document.addEventListener('keypress', (e) => {
-    let letter = '';
-    const code = e.code;
-    if(code.toUpperCase() === `KEY${e.key.toUpperCase()}`){
-        letter = e.key.toUpperCase();
-    } else {
-        
-        switch(e.key){
-            case 'å':
-            case 'Å':
-                letter = 'Å';
-                break;
-            case 'ä':
-            case 'Ä':
-                letter = 'Ä';
-                break;
-            case 'ö':
-            case 'Ö':
-                letter = 'Ö';
-                break;
-            default:
-                alert('Använd bara bokstäver!');
-        }
-        
-    }
-    console.log(letter);
-    
-});
 
 // --------- hangman path variables ------------------
 const noose = document.querySelector('#noose');
@@ -45,6 +17,9 @@ scaffold.setAttribute('opacity', 1);
 ground.setAttribute('opacity', 1);
 // --------------------------------------------------
 
+const wrongLetters = document.querySelector('.wrong-letters');
+const letterBoxes = document.querySelector('.letter-boxes');
+
 let answers = [
     "apple",
     "apricot",
@@ -61,7 +36,6 @@ let answers = [
     "blackcurrant",
     "blueberry",
     "broccoli",
-    "Brussels sprouts",
     "squash",
     "cabbage",
     "cantaloupe",
@@ -83,7 +57,6 @@ let answers = [
     "gooseberry",
     "grape",
     "grapefruit",
-    "green beans",
     "honeydew",
     "kale",
     "kiwi",
@@ -129,6 +102,78 @@ let answers = [
     "turnip",
     "watermelon",
     "zucchini"];
-let answer = answers[13].toUpperCase();
-let guesses = [];
+let answer = '';
+let guesses = 0;
 let guess = "";
+
+function newGame(){
+    rand = Math.round(Math.random() * (answers.length - 1));
+    answer = answers[rand].toUpperCase();
+    for(let i = 0; i < answer.length; i++){
+        let newBox = document.createElement('div');
+        newBox.classList.add('box');
+        newBox.innerHTML = `<p></p>`;
+        letterBoxes.appendChild(newBox);
+
+    }
+    console.log(answer);
+}
+
+document.addEventListener('keypress', (e) => {
+    let letter = '';
+    const code = e.code;
+    if(code.toUpperCase() === `KEY${e.key.toUpperCase()}`){
+        letter = e.key.toUpperCase();
+    } else {
+        
+        switch(e.key){
+            case 'å':
+            case 'Å':
+                letter = 'Å';
+                break;
+            case 'ä':
+            case 'Ä':
+                letter = 'Ä';
+                break;
+            case 'ö':
+            case 'Ö':
+                letter = 'Ö';
+                break;
+            default:
+                alert('Använd bara bokstäver!');
+        }
+        
+    }
+    console.log(letter);
+    checkLetter(letter);
+    
+});
+
+function checkLetter(guess){
+    if(answer.indexOf(guess) > -1){
+        console.log(`The letter "${guess}" exists in the solution.`);
+    } else {
+        console.log(`The letter "${guess}" is not part of the solution.`);
+        let newDiv = document.createElement('div');
+        newDiv.classList.add('letter');
+        newDiv.innerHTML = guess;
+        wrongLetters.appendChild(newDiv);
+    }
+}
+
+function addCorrectLetter(){
+
+}
+
+function addWrongLetter(){
+
+}
+
+function winLose(){
+
+}
+
+newGame();
+
+
+
