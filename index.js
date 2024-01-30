@@ -1,3 +1,32 @@
+document.addEventListener('keypress', (e) => {
+    let letter = '';
+    const code = e.code;
+    if(code.toUpperCase() === `KEY${e.key.toUpperCase()}`){
+        letter = e.key.toUpperCase();
+    } else {
+        
+        switch(e.key){
+            case 'å':
+            case 'Å':
+                letter = 'Å';
+                break;
+            case 'ä':
+            case 'Ä':
+                letter = 'Ä';
+                break;
+            case 'ö':
+            case 'Ö':
+                letter = 'Ö';
+                break;
+            default:
+                alert('Använd bara bokstäver!');
+        }
+        
+    }
+    console.log(letter);
+    
+});
+
 // --------- hangman path variables ------------------
 const noose = document.querySelector('#noose');
 const head = document.querySelector('#head');
