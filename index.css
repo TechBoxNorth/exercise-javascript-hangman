@@ -17,6 +17,13 @@
     align-items: center;
 }
 
+.win-lose {
+    position: absolute;
+    transform: translateY(410px);
+    font-size: 50px;
+    background-color: whitesmoke;
+}
+
 .wrong-letters {
     align-self:flex-start;
     margin-left: 50px;

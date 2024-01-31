@@ -1,24 +1,35 @@
 
 // --------- hangman path variables ------------------
-const noose = document.querySelector('#noose');
-const head = document.querySelector('#head');
-const body = document.querySelector('#body');
-const arms = document.querySelector('#arms');
-const legs = document.querySelector('#legs');
+const stages = []
+const winLoseText = document.querySelector('.win-lose');
 const scaffold = document.querySelector('#scaffold');
+stages.push(scaffold);
 const ground = document.querySelector('#ground');
+stages.push(ground);
+const noose = document.querySelector('#noose');
+stages.push(noose);
+const head = document.querySelector('#head');
+stages.push(head);
+const body = document.querySelector('#body');
+stages.push(body);
+const arms = document.querySelector('#arms');
+stages.push(arms);
+const legs = document.querySelector('#legs');
 
-noose.setAttribute('opacity', 1);
-head.setAttribute('opacity', 1);
-body.setAttribute('opacity', 1);
-arms.setAttribute('opacity', 1);
-legs.setAttribute('opacity', 1);
-scaffold.setAttribute('opacity', 1);
-ground.setAttribute('opacity', 1);
+stages.push(legs);
+noose.setAttribute('opacity', 0);
+head.setAttribute('opacity', 0);
+body.setAttribute('opacity', 0);
+arms.setAttribute('opacity', 0);
+legs.setAttribute('opacity', 0);
+scaffold.setAttribute('opacity', 0);
+ground.setAttribute('opacity', 0);
 // --------------------------------------------------
 
 const wrongLetters = document.querySelector('.wrong-letters');
 const letterBoxes = document.querySelector('.letter-boxes');
+
+let winLose = false;
 
 let answers = [
     "apple",
@@ -104,7 +115,10 @@ let answers = [
     "zucchini"];
 let answer = '';
 let guesses = '';
+let errors = 0;
+let checks = 0;
 let guess = "";
+winLoseText.innerText = '';
 
 function newGame(){
     rand = Math.round(Math.random() * (answers.length - 1));
@@ -120,34 +134,39 @@ function newGame(){
 }
 
 document.addEventListener('keypress', (e) => {
-    let letter = '';
-    const code = e.code;
-    if(code.toUpperCase() === `KEY${e.key.toUpperCase()}`){
-        letter = e.key.toUpperCase();
-    } else {
-        
-        switch(e.key){
-            case 'å':
-            case 'Å':
-                letter = 'Å';
-                break;
-            case 'ä':
-            case 'Ä':
-                letter = 'Ä';
-                break;
-            case 'ö':
-            case 'Ö':
-                letter = 'Ö';
-                break;
-            default:
-                alert('Använd bara bokstäver!');
+    if(!winLose){
+        let letter = '';
+        const code = e.code;
+        if(code.toUpperCase() === `KEY${e.key.toUpperCase()}`){
+            letter = e.key.toUpperCase();
+        } else {
+            
+            switch(e.key){
+                case 'å':
+                case 'Å':
+                    letter = 'Å';
+                    break;
+                case 'ä':
+                case 'Ä':
+                    letter = 'Ä';
+                    break;
+                case 'ö':
+                case 'Ö':
+                    letter = 'Ö';
+                    break;
+                default:
+                    alert('Använd bara bokstäver!');
+            }
+            
         }
-        
+        checkLetter(letter);
+        checkForWin();
+    } else {
+        location.reload();
     }
-    console.log(letter);
-    checkLetter(letter);
-    
 });
+
+
 
 function checkLetter(guess){
     if(guesses.includes(guess)){
@@ -156,7 +175,6 @@ function checkLetter(guess){
     } else {
         guesses += guess;
     }
-    console.log(guesses);
     if(answer.indexOf(guess) > -1){
         addCorrectLetter(guess);
     } else if(!answer.includes(guess)){
@@ -165,24 +183,45 @@ function checkLetter(guess){
 }
 
 function addCorrectLetter(guess){
-    console.log(`The letter "${guess}" exists in the solution.`);
     for(let i = 0; i < answer.length; i++){
         if(guess === answer[i]){
             letterBoxes.children[i].firstChild.innerText = guess;
+            checks += 1;
         }
     }
 }
 
 function addWrongLetter(guess){
-    console.log(`The letter "${guess}" is not part of the solution.`);
     let newDiv = document.createElement('div');
     newDiv.classList.add('letter');
     newDiv.innerHTML = guess;
     wrongLetters.appendChild(newDiv);
+    errors += 1;
+    if(errors <= stages.length){
+        stages[errors - 1].setAttribute('opacity', 1);
+        if(errors === stages.length){
+            lose();
+        }
+    }
+    
 }
 
-function winLose(){
+function checkForWin(){
+    if(checks === answer.length){
+        win();
+    }
+}
 
+function win(){
+    winLose = true;
+    console.log('You win!');
+    winLoseText.innerText = 'YOU WIN!'
+}
+
+function lose(){
+    winLose = true;
+    console.log('You lose!');
+    winLoseText.innerText = 'YOU LOSE!';
 }
 
 newGame();
